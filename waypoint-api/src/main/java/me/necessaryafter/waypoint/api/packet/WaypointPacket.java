@@ -1,18 +1,18 @@
 package me.necessaryafter.waypoint.api.packet;
 
-import lombok.Getter;
+/**
+ * Class responsible for packets receive and send handler.
+ */
+public abstract class WaypointPacket<V> {
 
-@Getter
-public abstract class WaypointPacket<T> {
+    /**
+     * Functions that are called when the packet is sent
+     */
+    public void onSend() {}
 
-    protected T object;
-
-    public WaypointPacket(T object) {
-        this.object = object;
-    }
-
-    public abstract void onSend(T data);
-
-    public void onRead(T data) {}
+    /**
+     * Functions that are called when the packet is received
+     */
+    public abstract void onReceive();
 
 }

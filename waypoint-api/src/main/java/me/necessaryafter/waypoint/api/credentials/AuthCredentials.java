@@ -1,4 +1,4 @@
-package me.necessaryafter.waypoint.api.auth;
+package me.necessaryafter.waypoint.api.credentials;
 
 public interface AuthCredentials {
 

@@ -30,6 +30,6 @@ public final class WaypointPubSub extends JedisPubSub {
         }
 
         final WaypointPacket waypointPacket = packetService.deserialize(message);
-
+        waypointPacket.onReceive();
     }
 }

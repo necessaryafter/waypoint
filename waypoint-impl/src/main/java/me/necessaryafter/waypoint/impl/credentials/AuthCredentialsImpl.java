@@ -1,14 +1,13 @@
 package me.necessaryafter.waypoint.impl.credentials;
 
 import lombok.RequiredArgsConstructor;
-import me.necessaryafter.waypoint.api.auth.AuthCredentials;
+import me.necessaryafter.waypoint.api.credentials.AuthCredentials;
 
 @RequiredArgsConstructor
 public final class AuthCredentialsImpl implements AuthCredentials {
 
     private final String address, username, password;
     private final int port;
-
 
     @Override
     public String getAddress() {

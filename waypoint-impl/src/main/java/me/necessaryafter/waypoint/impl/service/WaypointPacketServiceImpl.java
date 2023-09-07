@@ -21,23 +21,22 @@ public final class WaypointPacketServiceImpl implements WaypointPacketService {
     private final Gson gson;
     private final ExecutorService packetPublisherExecutor;
     private final ServerRegistry serverRegistry;
-    private final Waypoint waypoint;
+    private final Waypoint Waypoint;
 
     private final List<WaypointPacket> classes = new ArrayList<>();
 
-    public WaypointPacketServiceImpl(@NonNull Gson gson, @NonNull ServerRegistry serverRegistry, Waypoint waypoint) {
+    public WaypointPacketServiceImpl(@NonNull Gson gson, @NonNull ServerRegistry serverRegistry, Waypoint Waypoint) {
         this.serverRegistry = serverRegistry;
-        this.waypoint = waypoint;
+        this.Waypoint = Waypoint;
         this.packetPublisherExecutor = Executors.newSingleThreadExecutor(
                 new NamedThreadFactory("waypoint-packet-publisher"));
 
         this.gson = gson;
     }
 
-    public WaypointPacketServiceImpl(@NonNull ServerRegistry serverRegistry, Waypoint waypoint) {
-        this(new GsonBuilder().setPrettyPrinting().create(), serverRegistry, waypoint);
+    public WaypointPacketServiceImpl(@NonNull ServerRegistry serverRegistry, Waypoint Waypoint) {
+        this(new GsonBuilder().setPrettyPrinting().create(), serverRegistry, Waypoint);
     }
-
 
     @Override
     public <T extends WaypointPacket> void subscribe(WaypointPacket waypointPacket) {
@@ -49,10 +48,15 @@ public final class WaypointPacketServiceImpl implements WaypointPacketService {
         return null;
     }
 
+    /**
+     * Publishes the given waypoint packet.
+     *
+     * @param  waypointPacket    the waypoint packet to be published
+     */
     @Override
     public void publish(@NonNull WaypointPacket waypointPacket) {
         this.packetPublisherExecutor.execute(() -> {
-            try (final Jedis jedis = waypoint.getJedisPool().getResource()) {
+            try (final Jedis jedis = Waypoint.getJedisPool().getResource()) {
                 jedis.publish(String.format("waypoint-%s", waypointPacket.getClass().getName()), gson.toJson(waypointPacket));
             }
         });
@@ -61,7 +65,7 @@ public final class WaypointPacketServiceImpl implements WaypointPacketService {
     @Override
     public void send(@NonNull Server server, @NonNull WaypointPacket waypointPacket) {
         this.packetPublisherExecutor.execute(() -> {
-            try (final Jedis jedis = waypoint.getJedisPool().getResource()) {
+            try (final Jedis jedis = Waypoint.getJedisPool().getResource()) {
                 jedis.publish(String.format("waypoint-%s-%s", server.getId(),
                         waypointPacket.getClass().getName()), gson.toJson(waypointPacket));
             }
