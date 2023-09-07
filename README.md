@@ -30,6 +30,37 @@ Before starting to use Waypoint, it is necessary to initialize the connection wi
                 .build();
 ```
 
+The communication works through packets created beforehand by the developer. Check out an example below on how to create a packet.
+```java
+@Data
+public final class Product {
+
+    private final String productName;
+    private final int productId;
+
+}
+```
+
+```java
+@RequiredArgsConstructor
+public final class ProductPacket extends WaypointPacket<Product> {
+
+    private final Product product;
+
+    @Override
+    public void onReceive() {
+        System.out.println("Mensagem recebida!");
+        System.out.println(product.getProductName());
+    }
+
+    @Override
+    public void onSend() {
+        System.out.println("Mensagem enviada!");
+    }
+}
+
+```
+
 Currently, there are two ways for you to communicate between your servers, these ways are globally and specifically. As the name suggests, globally will communicate with all servers that use **Waypoint**, while using the specific method will only send to the server specified in the method. Check below.
 
 **Globally**
